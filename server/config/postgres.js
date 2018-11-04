@@ -11,5 +11,12 @@ module.exports = (app) => {
     /**
      *  @TODO: Supply the correct configuration values to connect to postgres
      */
+    port: app.get('PORT'),
+    host: app.get('PG_HOST'),
+    user: app.get('PG_USER'),
+    password: app.get('PG_PASSWORD'),
+    database: app.get('PG_DB'),
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 2000
   });
 };
