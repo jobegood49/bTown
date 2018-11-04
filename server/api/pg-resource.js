@@ -10,11 +10,11 @@ function tagsQueryString(tags, itemid, result) {
   return length === 0
     ? `${result};`
     : tags.shift() &&
-        tagsQueryString(
-          tags,
-          itemid,
-          `${result}($${tags.length + 1}, ${itemid})${length === 1 ? '' : ','}`
-        );
+    tagsQueryString(
+      tags,
+      itemid,
+      `${result}($${tags.length + 1}, ${itemid})${length === 1 ? '' : ','}`
+    );
 }
 
 module.exports = (postgres) => {
@@ -73,21 +73,17 @@ module.exports = (postgres) => {
        */
 
       const findUserQuery = {
-        text: '', // @TODO: Basic queries
+        text: `SELECT * FROM users WHERE users.id = $1`, // @TODO: Basic queries
         values: [id]
       };
-
-      /**
-       *  Refactor the following code using the error handling logic described above.
-       *  When you're done here, ensure all of the resource methods in this file
-       *  include a try catch, and throw appropriate errors.
-       *
-       *  Here is an example throw statement: throw 'User was not found.'
-       *  Customize your throw statements so the message can be used by the client.
-       */
-
-      const user = await postgres.query(findUserQuery);
-      return user;
+      
+      try {
+        const user = await postgres.query(findUserQuery)
+        if (!user) throw e
+        return user.rows[0]
+      } catch (e) {
+        throw 'User not found'
+      }
       // -------------------------------
     },
     async getItems(idToOmit) {
