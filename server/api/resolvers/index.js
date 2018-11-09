@@ -52,15 +52,21 @@ module.exports = (app) => {
           throw new ApolloError(e);
         }
       },
-      async items() {
-        // @TODO: Replace this mock return statement with the correct items from Postgres
-        return [];
-        // -------------------------------
+      async items(parent, { filter }, { pgResource }, info) {
+        try {
+          const items = await pgResource.getItems(filter)
+          return items
+        } catch (e) {
+          throw new ApolloError(e);
+        }
       },
-      async tags() {
-        // @TODO: Replace this mock return statement with the correct tags from Postgres
-        return [];
-        // -------------------------------
+      async tags(parent, args, {pgResource}, info) {
+        try {
+          const tags = await pgResource.getTags()
+          return tags
+        } catch (e) {
+          throw new ApolloError(e)
+        }
       }
     },
 
@@ -101,66 +107,65 @@ module.exports = (app) => {
        *
        */
       // @TODO: Uncomment these lines after you define the Item type with these fields
-      // async itemowner() {
-      //   // @TODO: Replace this mock return statement with the correct user from Postgres
-      //   return {
-      //     id: 29,
-      //     fullname: "Mock user",
-      //     email: "mock@user.com",
-      //     bio: "Mock user. Remove me."
-      //   }
-      //   // -------------------------------
-      // },
-      // async tags() {
-      //   // @TODO: Replace this mock return statement with the correct tags for the queried Item from Postgres
-      //   return []
-      //   // -------------------------------
-      // },
-      // async borrower() {
-      //   /**
-      //    * @TODO: Replace this mock return statement with the correct user from Postgres
-      //    * or null in the case where the item has not been borrowed.
-      //    */
-      //   return null
-      //   // -------------------------------
-      // },
-      // async imageurl({ imageurl, imageid, mimetype, data }) {
-      //   if (imageurl) return imageurl
-      //   if (imageid) {
-      //     return `data:${mimetype};base64, ${data}`
-      //   }
-      // }
-      // -------------------------------
+      async itemowner(parent, args, { pgResource }, info) {
+        try {
+          const itemowner = await pgResource.getUserById(parent.ownerid)
+          return itemowner
+        } catch (e) {
+          throw new ApolloError(e)
+        }
+      }
     },
+    // async tags() {
+    //   // @TODO: Replace this mock return statement with the correct tags for the queried Item from Postgres
+    //   return []
+    //   // -------------------------------
+    // },
+    // async borrower() {
+    //   /**
+    //    * @TODO: Replace this mock return statement with the correct user from Postgres
+    //    * or null in the case where the item has not been borrowed.
+    //    */
+    //   return null
+    //   // -------------------------------
+    // },
+    // async imageurl({ imageurl, imageid, mimetype, data }) {
+    //   if (imageurl) return imageurl
+    //   if (imageid) {
+    //     return `data:${mimetype};base64, ${data}`
+    //   }
+    // }
+    // -------------------------------
+  //},
 
     Mutation: {
-      // @TODO: Uncomment this later when we add auth
-      // ...authMutations(app),
-      // -------------------------------
+    // @TODO: Uncomment this later when we add auth
+    // ...authMutations(app),
+    // -------------------------------
 
-      async addItem(parent, args, context, info) {
-        /**
-         *  @TODO: Destructuring
-         *
-         *  The 'args' and 'context' parameters of this resolver can be destructured
-         *  to make things more readable and avoid duplication.
-         *
-         *  When you're finished with this resolver, destructure all necessary
-         *  parameters in all of your resolver functions.
-         *
-         *  Again, you may look at the user resolver for an example of what
-         *  destructuring should look like.
-         */
+    async addItem(parent, args, context, info) {
+      /**
+       *  @TODO: Destructuring
+       *
+       *  The 'args' and 'context' parameters of this resolver can be destructured
+       *  to make things more readable and avoid duplication.
+       *
+       *  When you're finished with this resolver, destructure all necessary
+       *  parameters in all of your resolver functions.
+       *
+       *  Again, you may look at the user resolver for an example of what
+       *  destructuring should look like.
+       */
 
-        image = await image;
-        const user = await jwt.decode(context.token, app.get('JWT_SECRET'));
-        const newItem = await context.pgResource.saveNewItem({
-          item: args.item,
-          image: args.image,
-          user
-        });
-        return newItem;
-      }
+      image = await image;
+      const user = await jwt.decode(context.token, app.get('JWT_SECRET'));
+      const newItem = await context.pgResource.saveNewItem({
+        item: args.item,
+        image: args.image,
+        user
+      });
+      return newItem;
     }
-  };
+  }
+};
 };

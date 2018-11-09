@@ -16,7 +16,7 @@ module.exports = (app) => {
     user: app.get('PG_USER'),
     password: app.get('PG_PASSWORD'),
     database: app.get('PG_DB'),
-    idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 2000
+    // idleTimeoutMillis: 30000,
+    // connectionTimeoutMillis: 2000
   });
 };

@@ -76,7 +76,7 @@ module.exports = (postgres) => {
         text: `SELECT * FROM users WHERE users.id = $1`, // @TODO: Basic queries
         values: [id]
       };
-      
+
       try {
         const user = await postgres.query(findUserQuery)
         if (!user) throw e
@@ -87,22 +87,22 @@ module.exports = (postgres) => {
       // -------------------------------
     },
     async getItems(idToOmit) {
-      const items = await postgres.query({
-        /**
-         *  @TODO: Advanced queries
-         *
-         *  Get all Items. If the idToOmit parameter has a value,
-         *  the query should only return Items were the ownerid column
-         *  does not contain the 'idToOmit'
-         *
-         *  Hint: You'll need to use a conditional AND and WHERE clause
-         *  to your query text using string interpolation
-         */
-
-        text: ``,
-        values: idToOmit ? [idToOmit] : []
-      });
-      return items.rows;
+      let query = {
+        text: `SELECT * FROM items`
+      }
+      if (idToOmit) {
+        query = {
+          text: `SELECT * FROM items WHERE items.ownerid != $1 AND items.borrowerid IS NULL`,
+          values: [idToOmit]
+        }
+      }
+      try {
+        const items = await postgres.query(query);
+        if (!items) throw e
+        return items.rows;
+      } catch (e) {
+        throw 'No items found'
+      }
     },
     async getItemsForUser(id) {
       const items = await postgres.query({
@@ -127,8 +127,14 @@ module.exports = (postgres) => {
       return items.rows;
     },
     async getTags() {
-      const tags = await postgres.query(/* @TODO: Basic queries */);
-      return tags.rows;
+      let query = { text: `SELECT * FROM tags` }
+      try {
+        const tags = await postgres.query(query);
+        if (!tags) throw e
+        return tags.rows
+      } catch (e) {
+        throw 'no tags found'
+      }
     },
     async getTagsForItem(id) {
       const tagsQuery = {
