@@ -90,12 +90,15 @@ module.exports = (app) => {
           throw new ApolloError(e)
         }
       },
-      // borrowed() {
-      //   // @TODO: Replace this mock return statement with the correct items from Postgres
-      //   return []
-      //   // -------------------------------
-      // }
-      // -------------------------------
+      async borrowed(parent, args, {pgResource}, info) {
+        try {
+          const items = await pgResource.getBorrowedItemsForUser(parent.id)
+          return items
+        } catch (e) {
+          throw new ApolloError(e)
+        }
+      }
+    
     },
 
     Item: {
