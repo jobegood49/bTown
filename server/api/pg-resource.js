@@ -112,10 +112,10 @@ module.exports = (postgres) => {
         values: [id]
       }
       try {
-      const items = await postgres.query(query);
-      if (!items) throw e        
-      return items.rows
-      } catch(e) {
+        const items = await postgres.query(query);
+        if (!items) throw e
+        return items.rows
+      } catch (e) {
         throw 'No items found'
       }
     },
@@ -143,13 +143,19 @@ module.exports = (postgres) => {
       }
     },
     async getTagsForItem(id) {
-      const tagsQuery = {
-        text: ``, // @TODO: Advanced queries
+      let query = {
+        text: `SELECT * from tags
+        INNER JOIN item_tags ON item_tags.tagid = tags.id
+        WHERE itemid = $1`,
         values: [id]
-      };
-
-      const tags = await postgres.query(tagsQuery);
-      return tags.rows;
+      }
+      try {
+        const tags = await postgres.query(query);
+        if (!tags) throw e
+        return tags.rows;
+      } catch (e) {
+        throw 'no tags found'
+      }
     },
     async saveNewItem({ item, image, user }) {
       /**
@@ -179,71 +185,92 @@ module.exports = (postgres) => {
         postgres.connect((err, client, done) => {
           try {
             // Begin postgres transaction
-            client.query('BEGIN', err => {
+            client.query('BEGIN', async err => {
+              const { title, description, tags } = item
+              const newInsert = {
+                text: `INSERT into items(title, description, ownerid) VALUES ($1, $2, $3) RETURNING *`,
+                values: [title, description, user]
+              }
+              const newItem = await client.query(newInsert);
+              const itemid = newItem.rows[0].id;
+
+              console.log(itemid)
+
+              client.query('COMMIT', err => {
+                if (err) {
+                  throw err;
+                }
+                done();
+                resolve(newItem.rows[0])
+              });
+
+
+
+
               // Convert image (file stream) to Base64
-              const imageStream = image.stream.pipe(strs('base64'));
+              // const imageStream = image.stream.pipe(strs('base64'));
 
-              let base64Str = '';
-              imageStream.on('data', data => {
-                base64Str += data;
-              });
+              // let base64Str = '';
+              // imageStream.on('data', data => {
+              //   base64Str += data;
+              // });
 
-              imageStream.on('end', async () => {
-                // Image has been converted, begin saving things
-                const { title, description, tags } = item;
+              // imageStream.on('end', async () => {
+              //   // Image has been converted, begin saving things
+              //   const { title, description, tags } = item;
 
-                // Generate new Item query
-                // @TODO
-                // -------------------------------
+              //   // Generate new Item query
+              //   // @TODO
+              //   // -------------------------------
 
-                // Insert new Item
-                // @TODO
-                // -------------------------------
+              //   // Insert new Item
+              //   // @TODO
+              //   // -------------------------------
 
-                const imageUploadQuery = {
-                  text:
-                    'INSERT INTO uploads (itemid, filename, mimetype, encoding, data) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-                  values: [
-                    // itemid,
-                    image.filename,
-                    image.mimetype,
-                    'base64',
-                    base64Str
-                  ]
-                };
+              //   // const imageUploadQuery = {
+              //   //   text:
+              //   //     'INSERT INTO uploads (itemid, filename, mimetype, encoding, data) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+              //   //   values: [
+              //   //     // itemid,
+              //   //     image.filename,
+              //   //     image.mimetype,
+              //   //     'base64',
+              //   //     base64Str
+              //   //   ]
+              //   // };
 
-                // Upload image
-                const uploadedImage = await client.query(imageUploadQuery);
-                const imageid = uploadedImage.rows[0].id;
+              //   // Upload image
+              //   const uploadedImage = await client.query(imageUploadQuery);
+              //   const imageid = uploadedImage.rows[0].id;
 
-                // Generate image relation query
-                // @TODO
-                // -------------------------------
+              //   // Generate image relation query
+              //   // @TODO
+              //   // -------------------------------
 
-                // Insert image
-                // @TODO
-                // -------------------------------
+              //   // Insert image
+              //   // @TODO
+              //   // -------------------------------
 
-                // Generate tag relationships query (use the'tagsQueryString' helper function provided)
-                // @TODO
-                // -------------------------------
+              //   // Generate tag relationships query (use the'tagsQueryString' helper function provided)
+              //   // @TODO
+              //   // -------------------------------
 
-                // Insert tags
-                // @TODO
-                // -------------------------------
+              //   // Insert tags
+              //   // @TODO
+              //   // -------------------------------
 
-                // Commit the entire transaction!
-                client.query('COMMIT', err => {
-                  if (err) {
-                    throw err;
-                  }
-                  // release the client back to the pool
-                  done();
-                  // Uncomment this resolve statement when you're ready!
-                  // resolve(newItem.rows[0])
-                  // -------------------------------
-                });
-              });
+              //   // Commit the entire transaction!
+              //   client.query('COMMIT', err => {
+              //     if (err) {
+              //       throw err;
+              //     }
+              //     // release the client back to the pool
+              //     done();
+              //     // Uncomment this resolve statement when you're ready!
+              //     // resolve(newItem.rows[0])
+              //     // -------------------------------
+              //   });
+              // });
             });
           } catch (e) {
             // Something went wrong

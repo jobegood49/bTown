@@ -121,12 +121,16 @@ module.exports = (app) => {
           throw new ApolloError(e)
         }
       }
+    ,
+    async tags(parent, args, {pgResource}, info) {
+      try {
+        const tags = await pgResource.getTagsForItem(parent.id)
+        return tags
+      } catch (e) {
+        throw new ApolloError(e)
+      }
     },
-    // async tags() {
-    //   // @TODO: Replace this mock return statement with the correct tags for the queried Item from Postgres
-    //   return []
-    //   // -------------------------------
-    // },
+  },
     // async borrower() {
     //   /**
     //    * @TODO: Replace this mock return statement with the correct user from Postgres
@@ -163,12 +167,15 @@ module.exports = (app) => {
        *  destructuring should look like.
        */
 
-      image = await image;
-      const user = await jwt.decode(context.token, app.get('JWT_SECRET'));
+      // image = await image;
+      // const user = await jwt.decode(context.token, app.get('JWT_SECRET'));
       const newItem = await context.pgResource.saveNewItem({
-        item: args.item,
-        image: args.image,
-        user
+        item: {
+          title: args.title,
+          description: args.description,
+          tags: args.tags
+        },
+        user: args.ownerid
       });
       return newItem;
     }

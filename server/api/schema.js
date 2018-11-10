@@ -71,6 +71,11 @@ module.exports = gql`
   }
 
   type Mutation {
-    addItem: Boolean
+    addItem(
+      ownerid: ID!
+      title: String!
+      description: String!
+      tags: [AssignedTag]!
+    ): Boolean
   }
 `;
