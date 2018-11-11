@@ -77,5 +77,15 @@ module.exports = gql`
       description: String!
       tags: [AssignedTag]!
     ): Boolean
+    signup(
+      email: String!
+      fullname: String!
+      password: String!
+    ): Boolean
+    login(
+      email: String!,
+      password: String!
+    ): Boolean
+    logout: Boolean
   }
 `;
