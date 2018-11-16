@@ -42,6 +42,7 @@ const ItemFields = gql`
     }
   }
 `;
+
 // export const ITEM_QUERY = gql`
 //   query items($id: ID!) {
 //     # @TODO: Query an item by its id and return the ItemFields fragment.
@@ -64,8 +65,7 @@ export const ALL_ITEMS_QUERY = gql`
 
 // export const ALL_USER_ITEMS_QUERY = gql`
 //   query user($id: ID!) {
-//     # @TODO: Query the bio, email, fullname, items, and borrowed for the user by id
-//     # Use the ItemFields fragment for the items and borrowed fields.
+   
 //   }
 //   ${ItemFields}
 // `;

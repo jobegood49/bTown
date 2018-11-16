@@ -7,10 +7,10 @@ import React from 'react';
 // -------------------------------
 
 import {
-  // ALL_TAGS_QUERY,
+  ALL_TAGS_QUERY,
   ALL_ITEMS_QUERY,
   // ALL_USER_ITEMS_QUERY,
-  //ADD_ITEM_MUTATION
+  ADD_ITEM_MUTATION
 } from '../apollo/queries';
 
 const itemsData = ({ render }) => {
