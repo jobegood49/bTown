@@ -7,13 +7,22 @@ import React from 'react';
 // -------------------------------
 
 import {
-  ALL_TAGS_QUERY,
+  // ALL_TAGS_QUERY,
   ALL_ITEMS_QUERY,
-  ALL_USER_ITEMS_QUERY,
-  ADD_ITEM_MUTATION
-} from '../ApolloClient/queries';
+  // ALL_USER_ITEMS_QUERY,
+  //ADD_ITEM_MUTATION
+} from '../apollo/queries';
 
 const itemsData = ({ render }) => {
+  return (
+    <Query query={ALL_ITEMS_QUERY}>
+      {({ loading, error, data: { items } = {} }) =>
+        render({ loading, error, items })
+      }
+    </Query>
+  )
+
+
   /**
    * @TODO: Use Apollo's <Query /> component to fetch all the items.
    *
@@ -22,7 +31,7 @@ const itemsData = ({ render }) => {
    * The final query will ultimately filter out items that belong to the
    * currently logged-in user once you have added authentication.
    */
-  return undefined;
+
 };
 
 const userItemsData = ({ userId, render }) => {
@@ -54,7 +63,7 @@ const addItem = ({ render }) => {
 const ItemsContainer = adopt({
   // @TODO: Uncomment each line as you write the corresponding query.
   // tagData,
-  // itemsData,
+  itemsData,
   // userItemsData,
   // addItem
   // -------------------------------
