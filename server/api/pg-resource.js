@@ -88,7 +88,8 @@ module.exports = (postgres) => {
     },
     async getItems(idToOmit) {
       let query = {
-        text: `SELECT * FROM items`
+        text: `SELECT items.id,items.title,items.description,items.created, uploads.data AS 
+        imageurl from items INNER JOIN uploads ON itemid = items.id`
       }
       if (idToOmit) {
         query = {

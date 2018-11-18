@@ -8,28 +8,28 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import styles from './styles'
 
-const ItemCard = ({classes}) => {
+const ItemCard = ({classes, item}) => {
+    console.log(item)
     return (
         <Card className={classes.card}>
                 <CardMedia
                     className={classes.media}
-                    image="/static/images/cards/contemplative-reptile.jpg"
+                    image={item.imageurl}
                     title="Contemplative Reptile"
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
-                        Lizard
+                        {item.title}
             </Typography>
                     <Typography component="p">
-                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                        across all continents except Antarctica
+                        {item.description}
             </Typography>
                 </CardContent>
                 <Button size="small" color="primary">
-                    Share
+                    Buy
           </Button>
                 <Button size="small" color="primary">
-                    Learn More
+                    Details
           </Button>
         </Card>
     );

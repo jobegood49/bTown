@@ -23,9 +23,9 @@ const Items = ({ classes }) => {
         return (
           <div>
             <Grid container className={classes.demo} justify="center" spacing={Number(spacing)}>
-              {items.map(value => (
-                <Grid key={value} item>
-                  <ItemCard />
+              {items.map(item => (
+                <Grid key={item.id} item>
+                  <ItemCard item={item}/>
                 </Grid>
               ))}
             </Grid>

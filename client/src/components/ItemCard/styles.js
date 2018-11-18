@@ -1,6 +1,7 @@
 const styles = theme => ({
     card: {
-        maxWidth: 345,
+        height: '30em',
+        width: '25em'
     },
     media: {
         height: 140,
