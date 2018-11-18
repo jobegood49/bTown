@@ -1,3 +1,7 @@
-const styles = theme => ({});
+const styles = theme => ({
+    test: {
+        color: 'red',
+    }
+});
 
 export default styles;
