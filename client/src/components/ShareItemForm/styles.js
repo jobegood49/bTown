@@ -1,6 +1,8 @@
 const styles = theme => ({
     test: {
-        color: 'red',
+        height: '20em',
+        width: '30em',
+        margin: '5em'
     }
 });
 
