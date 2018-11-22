@@ -56,20 +56,21 @@ const tagData = ({ render }) => {
 };
 
 const addItem = ({ render }) => {
-  /**
-   * @TODO: Use Apollo's <Mutation /> component to use the signup mutation.
-   *
-   * Note: Be sure to use `refetchQueries` to refresh Apollo's cache with the
-   * latest items for the user.
-   */
-  return undefined;
+  return (
+    <Mutation
+    mutation={ADD_ITEM_MUTATION}
+  >
+    {(mutation, { data, error, loading }) =>
+      render({ mutation, data, error, loading })}
+  </Mutation>
+  )
 };
 const ItemsContainer = adopt({
   // @TODO: Uncomment each line as you write the corresponding query.
-   tagData,
+  tagData,
   itemsData,
   // userItemsData,
-  // addItem
+  addItem
   // -------------------------------
 });
 

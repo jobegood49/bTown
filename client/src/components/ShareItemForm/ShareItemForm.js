@@ -14,9 +14,6 @@ import Checkbox from '@material-ui/core/Checkbox'
 import ItemsContainer from '../../containers/ItemsContainer'
 import FormControl from '@material-ui/core/FormControl'
 
-
-
-
 class ShareForm extends Component {
   constructor(props) {
     super(props);
@@ -44,37 +41,72 @@ class ShareForm extends Component {
     // this.props.resetNewItemImage()
     this.setState({ fileSelected: false })
   }
-  sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-  onSubmit = values => {
-    console.log(values, this.state.selectedTags, this.state.fileSelected)
+  onSubmit = (values, tags, addItem) => {
+    const { title, description } = values
+    const tagData = this.applyTags(tags)
+    console.log(tagData, 'this is tagData')
+    addItem.mutation({
+      variables: {
+        ownerid: '1',
+        title: title,
+        description: description,
+        tags: tagData
+      }
+    })
   };
 
   handleChange = event => {
     this.setState({ selectedTags: event.target.value });
   };
 
+  async saveItem(values, tags, addItem) {
+    const { validity, files: [file] } = this.fileInput.current
+    if (validity.valid && file) {
+      try {
+        const itemData = {
+          ...values,
+          tags: this.applyTags(tags)
+        }
+        await addItem.mutation({
+          variables: {
+            item: itemData,
+            image: file
+          }
+        })
+        this.setState({ done: true })
+      } catch (e) {
+        console.log(e)
+      }
+    } else {
+      console.log('No File...')
+    }
+  }
+
+  applyTags(tags) {
+    return (
+      tags &&
+      tags
+        .filter(tag => this.state.selectedTags.indexOf(tag.id) > -1)
+        .map(tag => ({ title: tag.title, id: tag.id }))
+    );
+  }
+
   render() {
     const { classes } = this.props
-    const ITEM_HEIGHT = 48;
-    const ITEM_PADDING_TOP = 8;
-    const MenuProps = {
-      PaperProps: {
-        style: {
-          maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-          width: 250,
-        },
-      },
-    };
+
     return (
       <ItemsContainer>
-        {({ tagData: { loading, error, tags } }) => {
+        {({ addItem, tagData: { loading, error, tags } }) => {
           if (loading) return 'loading'
           if (error) return 'error'
           return (
             <div className={classes.test}>
               <Form
-                onSubmit={values => this.onSubmit(values)}
+                onSubmit={(values) => {
+                  this.onSubmit(values, tags, addItem)
+                }
+                }
                 render={({ handleSubmit, form, submitting, pristine, values, invalid }) => (
                   <form onSubmit={handleSubmit}>
                     <Typography variant='display2' className={classes.headline}>
@@ -169,7 +201,6 @@ class ShareForm extends Component {
                               onChange={this.handleChange}
                               input={<Input id="select-multiple-checkbox" />}
                               renderValue={selected => this.generateTagsText(tags, selected)}
-                              MenuProps={MenuProps}
                             >
                               {tags.map(tag => (
                                 <MenuItem key={tag.id} value={tag.id}>
@@ -182,27 +213,25 @@ class ShareForm extends Component {
                         }}
                       </Field>
                     </FormControl>
-                    <Button
-                      type='submit'
-                      className={classes.formButton}
-                      variant='contained'
-                      size='large'
-                      color='primary'
-                      disabled={pristine || invalid}
-                    >
-                      Share
-                    </Button>
+
                     <div className="buttons">
-                      <button type="submit" disabled={submitting || pristine}>
-                        Submit
-                      </button>
-                      <button
+                      <Button
+                        type='submit'
+                        className={classes.formButton}
+                        variant='contained'
+                        size='large'
+                        color='primary'
+                        disabled={pristine || invalid}
+                      >
+                        Share
+                      </Button>
+                      <Button
                         type="button"
                         onClick={form.reset}
                         disabled={submitting || pristine}
                       >
                         Reset
-                      </button>
+                      </Button>
                     </div>
                     <pre>{JSON.stringify(values, 0, 2)}</pre>
                   </form>

@@ -197,6 +197,21 @@ module.exports = (postgres) => {
 
               console.log(itemid)
 
+              const tagsQuery = {
+                text: `INSERT INTO item_tags(tagid, itemid) VALUES ${tagsQueryString(
+                  [...tags],
+                  itemid,
+                  ''
+                )}`,
+                values: tags.map(tag => tag.id)
+              };
+
+              try {
+                await client.query(tagsQuery)
+              } catch (e) {
+                console.log(e)
+              }
+
               client.query('COMMIT', err => {
                 if (err) {
                   throw err;
