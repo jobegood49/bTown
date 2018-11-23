@@ -81,8 +81,8 @@ export const ALL_TAGS_QUERY = gql`
 
 export const ADD_ITEM_MUTATION = gql`
   mutation ($ownerid: ID!, $title: String!, $description: String!,
-      $tags: [AssignedTag]!) {
-        addItem(ownerid: $ownerid, title: $title, description: $description, tags: $tags) 
+      $tags: [AssignedTag]!, $image: Upload!) {
+        addItem(ownerid: $ownerid, title: $title, description: $description, tags: $tags, image: $image ) 
   }
 `;
 

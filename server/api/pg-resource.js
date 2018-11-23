@@ -187,6 +187,17 @@ module.exports = (postgres) => {
           try {
             // Begin postgres transaction
             client.query('BEGIN', async err => {
+              // Convert image (file stream) to Base64
+              const imageStream = image.stream.pipe(strs('base64'));
+
+              let base64Str = 'data:image/*;base64,';
+              imageStream.on('data', data => {
+                base64Str += data;
+              });
+
+              imageStream.on('end', async () => {
+              //   // Image has been converted, begin saving things
+             
               const { title, description, tags } = item
               const newInsert = {
                 text: `INSERT into items(title, description, ownerid) VALUES ($1, $2, $3) RETURNING *`,
@@ -197,67 +208,36 @@ module.exports = (postgres) => {
 
               console.log(itemid)
 
-              const tagsQuery = {
-                text: `INSERT INTO item_tags(tagid, itemid) VALUES ${tagsQueryString(
-                  [...tags],
-                  itemid,
-                  ''
-                )}`,
-                values: tags.map(tag => tag.id)
-              };
-
-              try {
-                await client.query(tagsQuery)
-              } catch (e) {
-                console.log(e)
-              }
-
-              client.query('COMMIT', err => {
-                if (err) {
-                  throw err;
-                }
-                done();
-                resolve(newItem.rows[0])
-              });
-
-
-
-
-              // Convert image (file stream) to Base64
-              // const imageStream = image.stream.pipe(strs('base64'));
-
-              // let base64Str = '';
-              // imageStream.on('data', data => {
-              //   base64Str += data;
-              // });
-
-              // imageStream.on('end', async () => {
-              //   // Image has been converted, begin saving things
-              //   const { title, description, tags } = item;
-
-              //   // Generate new Item query
-              //   // @TODO
-              //   // -------------------------------
-
-              //   // Insert new Item
-              //   // @TODO
-              //   // -------------------------------
-
-              //   // const imageUploadQuery = {
-              //   //   text:
-              //   //     'INSERT INTO uploads (itemid, filename, mimetype, encoding, data) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-              //   //   values: [
-              //   //     // itemid,
-              //   //     image.filename,
-              //   //     image.mimetype,
-              //   //     'base64',
-              //   //     base64Str
-              //   //   ]
-              //   // };
+                const imageUploadQuery = {
+                  text:
+                    'INSERT INTO uploads (itemid, filename, mimetype, encoding, data) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+                  values: [
+                    itemid,
+                    image.filename,
+                    image.mimetype,
+                    'base64',
+                    base64Str
+                  ]
+                };
 
               //   // Upload image
-              //   const uploadedImage = await client.query(imageUploadQuery);
-              //   const imageid = uploadedImage.rows[0].id;
+                const uploadedImage = await client.query(imageUploadQuery);
+                const imageid = uploadedImage.rows[0].id;
+
+                const tagsQuery = {
+                  text: `INSERT INTO item_tags(tagid, itemid) VALUES ${tagsQueryString(
+                    [...tags],
+                    itemid,
+                    ''
+                  )}`,
+                  values: tags.map(tag => tag.id)
+                };
+  
+                try {
+                  await client.query(tagsQuery)
+                } catch (e) {
+                  console.log(e)
+                }
 
               //   // Generate image relation query
               //   // @TODO
@@ -276,17 +256,17 @@ module.exports = (postgres) => {
               //   // -------------------------------
 
               //   // Commit the entire transaction!
-              //   client.query('COMMIT', err => {
-              //     if (err) {
-              //       throw err;
-              //     }
-              //     // release the client back to the pool
-              //     done();
-              //     // Uncomment this resolve statement when you're ready!
-              //     // resolve(newItem.rows[0])
-              //     // -------------------------------
-              //   });
-              // });
+                client.query('COMMIT', err => {
+                  if (err) {
+                    throw err;
+                  }
+                  // release the client back to the pool
+                  done();
+                  // Uncomment this resolve statement when you're ready!
+                   resolve(newItem.rows[0])
+                  // -------------------------------
+                });
+              });
             });
           } catch (e) {
             // Something went wrong

@@ -167,7 +167,7 @@ module.exports = (app) => {
        *  destructuring should look like.
        */
 
-      // image = await image;
+      imageData = await args.image;
       // const user = await jwt.decode(context.token, app.get('JWT_SECRET'));
       const newItem = await context.pgResource.saveNewItem({
         item: {
@@ -175,10 +175,10 @@ module.exports = (app) => {
           description: args.description,
           tags: args.tags
         },
+        image: imageData,
         user: args.ownerid
       });
       return newItem;
     }
   }
-};
-};
+}}

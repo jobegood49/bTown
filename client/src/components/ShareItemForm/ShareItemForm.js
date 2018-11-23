@@ -45,13 +45,13 @@ class ShareForm extends Component {
   onSubmit = (values, tags, addItem) => {
     const { title, description } = values
     const tagData = this.applyTags(tags)
-    console.log(tagData, 'this is tagData')
     addItem.mutation({
       variables: {
         ownerid: '1',
-        title: title,
-        description: description,
-        tags: tagData
+        title,
+        description,
+        tags: tagData,
+        image:this.state.fileSelected
       }
     })
   };

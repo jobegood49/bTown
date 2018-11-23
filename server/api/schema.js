@@ -11,7 +11,7 @@ const { gql } = require('apollo-server-express');
  * We will create the custom Date scalar together.
  */
 module.exports = gql`
-  # scalar Upload
+  scalar Upload
 
   scalar Date
 
@@ -76,6 +76,7 @@ module.exports = gql`
       title: String!
       description: String!
       tags: [AssignedTag]!
+      image: Upload!
     ): Boolean
     signup(
       email: String!
