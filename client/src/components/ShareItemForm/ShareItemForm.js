@@ -13,6 +13,12 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Checkbox from '@material-ui/core/Checkbox'
 import ItemsContainer from '../../containers/ItemsContainer'
 import FormControl from '@material-ui/core/FormControl'
+import { connect } from 'react-redux'
+import {
+  resetImage,
+  updateNewItem,
+  resetNewItem
+} from './../../redux/modules/ShareItemPreview'
 
 class ShareForm extends Component {
   constructor(props) {
@@ -72,6 +78,8 @@ class ShareForm extends Component {
 
   render() {
     const { classes } = this.props
+    const {resetImage, updateNewItem, resetNewItem} = this.props
+
 
     return (
       <ItemsContainer>
@@ -224,4 +232,23 @@ class ShareForm extends Component {
   }
 }
 
-export default withStyles(styles)(ShareForm);
+const mapDispatchToProps = dispatch => ({
+  updateNewItem(item) {
+    // Inside this function we can dispatch data to our reducer.
+    dispatch(updateNewItem(item))
+  },
+  resetNewItem() {
+    dispatch(resetNewItem())
+  },
+  resetImage() {
+    dispatch(resetImage())
+  }
+  // ... other methods
+})
+
+// export default withStyles(styles)(ShareForm);
+
+export default connect(
+  undefined,
+  mapDispatchToProps
+)(withStyles(styles)(ShareForm))
