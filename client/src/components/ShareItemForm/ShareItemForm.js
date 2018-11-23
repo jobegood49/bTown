@@ -35,6 +35,7 @@ class ShareForm extends Component {
   handleSelectFile(e) {
     this.setState({ fileSelected: this.fileInput.current.files[0] })
   }
+
   resetFileInput() {
     console.log(this.state.fileSelected)
     this.fileInput.current.value = ''
@@ -51,7 +52,7 @@ class ShareForm extends Component {
         title,
         description,
         tags: tagData,
-        image:this.state.fileSelected
+        image: this.state.fileSelected
       }
     })
   };
@@ -59,29 +60,6 @@ class ShareForm extends Component {
   handleChange = event => {
     this.setState({ selectedTags: event.target.value });
   };
-
-  async saveItem(values, tags, addItem) {
-    const { validity, files: [file] } = this.fileInput.current
-    if (validity.valid && file) {
-      try {
-        const itemData = {
-          ...values,
-          tags: this.applyTags(tags)
-        }
-        await addItem.mutation({
-          variables: {
-            item: itemData,
-            image: file
-          }
-        })
-        this.setState({ done: true })
-      } catch (e) {
-        console.log(e)
-      }
-    } else {
-      console.log('No File...')
-    }
-  }
 
   applyTags(tags) {
     return (

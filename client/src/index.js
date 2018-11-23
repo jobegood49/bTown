@@ -71,7 +71,7 @@ const App = () => {
       <CssBaseline />
       <Header />
       <ApolloProvider client = {client}>
-      <Home />
+      <Share />
       </ApolloProvider>
     </MuiThemeProvider>
   );
