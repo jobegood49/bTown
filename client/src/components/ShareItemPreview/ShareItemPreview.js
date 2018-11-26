@@ -4,10 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import ItemCard from '../ItemCard'
 import { connect } from 'react-redux'
 
-
-
 const ShareItemPreview = ({ classes}) => {
-    console.log(this.props, 'props')
+    
     return (
         <div>
             <ItemCard item={{

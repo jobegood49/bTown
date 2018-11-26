@@ -9,7 +9,6 @@ import Typography from '@material-ui/core/Typography';
 import styles from './styles'
 
 const ItemCard = ({classes, item}) => {
-    console.log(item)
     return (
         <Card className={classes.card}>
                 <CardMedia

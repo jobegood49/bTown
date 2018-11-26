@@ -76,6 +76,20 @@ class ShareForm extends Component {
     );
   }
 
+  dispatchUpdate(values, tags, updateNewItem) {
+    if (!values.imageurl && this.state.fileSelected) {
+      this.getBase64Url().then(imageurl => {
+        updateNewItem({
+          imageurl
+        })
+      })
+    }
+    updateNewItem({
+      ...values,
+      tags: this.applyTags(tags)
+    })
+  }
+
   render() {
     const { classes } = this.props
     const {resetImage, updateNewItem, resetNewItem} = this.props
@@ -95,6 +109,15 @@ class ShareForm extends Component {
                 }
                 render={({ handleSubmit, form, submitting, pristine, values, invalid }) => (
                   <form onSubmit={handleSubmit}>
+                  <FormSpy
+                    subscription={{ values: true }}
+                    component={({ values }) => {
+                      if (values) {
+                        this.dispatchUpdate(values, tags, updateNewItem)
+                      }
+                      return ''
+                    }}
+                  />
                     <Typography variant='display2' className={classes.headline}>
                       Share. Borrow. Prosper.
                   </Typography>

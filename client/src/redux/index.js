@@ -9,4 +9,6 @@ const store = createStore(
   composeWithDevTools(applyMiddleware(...middleware))
 )
 
+// console.log(store.getState(), 'this is the state')
+
 export default store
