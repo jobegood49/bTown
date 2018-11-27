@@ -1,6 +1,5 @@
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import ItemsContainer from './../../containers/ItemsContainer'
 import ItemCard from '../../components/ItemCard'
 
@@ -10,10 +9,7 @@ import React from 'react';
 import styles from './styles';
 
 const Items = ({ classes }) => {
-  this.state = {
-    spacing: '16',
-  };
-  const { spacing } = this.state;
+  const { spacing } = '16';
 
   return (
     <ItemsContainer>

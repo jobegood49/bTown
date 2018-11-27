@@ -4,16 +4,13 @@ import { withStyles } from '@material-ui/core/styles';
 import ItemCard from '../ItemCard'
 import { connect } from 'react-redux'
 
-const ShareItemPreview = ({ classes}) => {
+const ShareItemPreview = (props) => {
+    const { classes, shareItemPreview } = props
+    console.log(props,'this the props')
     
     return (
         <div>
-            <ItemCard item={{
-                imageurl: require('../../tekashi.jpg'),
-                title: 'toto',
-                description: 'toto1'
-            }
-            } />
+            <ItemCard item={shareItemPreview}/>
         </div>
     );
 };
@@ -21,7 +18,5 @@ const ShareItemPreview = ({ classes}) => {
 const mapStateToProps = state => ({
     shareItemPreview: state.shareItemPreview
 })
-
-// export default withStyles(styles)(ShareItemPreview);
 
 export default connect(mapStateToProps)(withStyles(styles)(ShareItemPreview))

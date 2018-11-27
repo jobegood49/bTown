@@ -6,10 +6,7 @@ import ShareItemPreview from '../../components/ShareItemPreview';
 import styles from './styles'
 import { connect } from 'react-redux'
 
-const Share = (props) => {
-  const { classes, shareItemPreview } = props
-  console.log(shareItemPreview, classes)
-  // console.log(props.shareItemPreview, 'toto')
+const Share = ({classes}) => {
   return (
     <div className={classes.container}>
       <ShareItemPreview />

@@ -76,6 +76,20 @@ class ShareForm extends Component {
     );
   }
 
+  getBase64Url() {
+    return new Promise(resolve => {
+      const reader = new FileReader()
+      reader.onload = e => {
+        resolve(
+          `data:${this.state.fileSelected.mimeType};base64, ${btoa(
+            e.target.result
+          )}`
+        )
+      }
+      reader.readAsBinaryString(this.state.fileSelected)
+    })
+  }
+
   dispatchUpdate(values, tags, updateNewItem) {
     if (!values.imageurl && this.state.fileSelected) {
       this.getBase64Url().then(imageurl => {

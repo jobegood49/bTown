@@ -34,15 +34,15 @@ const itemsData = ({ render }) => {
 
 };
 
-const userItemsData = ({ userId, render }) => {
+// const userItemsData = ({ userId, render }) => {
   /**
    * @TODO: Use Apollo's <Query /> component to fetch all of a user's items.
    *
    * Note: Your query will need to retrieve only items that belong to a
    * specific user id.
    */
-  return undefined;
-};
+//   return undefined;
+// };
 
 const tagData = ({ render }) => {
   return(
