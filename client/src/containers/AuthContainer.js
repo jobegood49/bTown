@@ -5,37 +5,45 @@ import React from 'react';
 import client from '../apollo';
 
 import {
-  VIEWER_QUERY,
+  // VIEWER_QUERY,
   LOGIN_MUTATION,
-  LOGOUT_MUTATION,
-  SIGNUP_MUTATION
-} from '../ApolloClient/queries';
+  // LOGOUT_MUTATION,
+  // SIGNUP_MUTATION
+} from '../apollo/queries';
 
-const signup = ({ render }) => {
-  /**
-   * @TODO: Use Apollo's <Mutation /> component to use the signup mutation.
-   */
-  return undefined;
-};
+// const signup = ({ render }) => {
+//   /**
+//    * @TODO: Use Apollo's <Mutation /> component to use the signup mutation.
+//    */
+//   return undefined;
+// };
 
 const login = ({ render }) => {
   /**
    * @TODO: Use Apollo's <Mutation /> component to use the login mutation.
    */
-  return undefined;
+  return (
+    <Mutation
+    mutation={LOGIN_MUTATION}
+  >
+    {(mutation, { data, error, loading }) =>
+      render({ mutation, data, error, loading })
+    }
+  </Mutation>
+  );
 };
 
-const logout = ({ render }) => {
-  /**
-   * @TODO: Use Apollo's <Mutation /> component to use the logout mutation.
-   */
-  return undefined;
-};
+// const logout = ({ render }) => {
+//   /**
+//    * @TODO: Use Apollo's <Mutation /> component to use the logout mutation.
+//    */
+//   return undefined;
+// };
 
 const AuthContainer = adopt({
   // @TODO: Uncomment each line as you write the corresponding query.
   // signup,
-  // login,
+  login,
   // logout
   // -------------------------------
 });

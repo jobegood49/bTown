@@ -99,8 +99,11 @@ module.exports = (app) => {
         //   token: generateToken(user, app.get('JWT_SECRET')),
         //   res: context.req.res
         // });
-        if (args.email === user.email)
-        return true
+        if (args.email === user.email) {
+          console.log('is logged in')
+          return true
+        }
+        
       } catch (e) {
         throw new AuthenticationError(e);
       }

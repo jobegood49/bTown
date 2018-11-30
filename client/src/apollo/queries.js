@@ -108,9 +108,8 @@ export const ADD_ITEM_MUTATION = gql`
 //   }
 // `;
 
-// export const LOGIN_MUTATION = gql`
-//   mutation login($user: LoginInput!) {
-//     # @TODO: Pass the user into the login mutation as an argument
-//     # and return the id of the new user when the mutation is complete.
-//   }
-// `;
+export const LOGIN_MUTATION = gql`
+  mutation ($email: String!, $password: String!) {
+  login(email: $email, password: $password)
+  }
+`;

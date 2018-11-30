@@ -9,7 +9,7 @@ import React from 'react';
 import styles from './styles';
 
 const Items = ({ classes }) => {
-  const { spacing } = '16';
+  const spacing = 16;
 
   return (
     <ItemsContainer>
@@ -18,7 +18,7 @@ const Items = ({ classes }) => {
         if (error) return 'error';
         return (
           <div>
-            <Grid container className={classes.demo} justify="center" spacing={Number(spacing)}>
+            <Grid container className={classes.demo} justify="center" spacing={spacing}>
               {items.map(item => (
                 <Grid key={item.id} item>
                   <ItemCard item={item}/>
