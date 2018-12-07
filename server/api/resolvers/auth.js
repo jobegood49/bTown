@@ -56,7 +56,9 @@ module.exports = (app) => {
          * and store that instead. The password can be decoded using the original password.
          */
         // @TODO: Use bcrypt to generate a cryptographic hash to conceal the user's password before storing it.
-        const hashedPassword = args.password;
+        // const hashedPassword = args.password;
+        const hashedPassword = await bcrypt.hash(args.password, 10)
+
         // -------------------------------
 
         const user = await context.pgResource.createUser({
