@@ -18,7 +18,9 @@ function setCookie({ tokenName, token, res }) {
    */
   // Refactor this method with the correct configuration values.
   res.cookie(tokenName, token, {
-    // @TODO: Supply the correct configuration values for our cookie here
+    httpOnly : true,
+    secure : process.env.NODE_ENV === 'production',
+    maxAge: 1000*60*60*2 
   });
   // -------------------------------
 }
@@ -94,11 +96,11 @@ module.exports = (app) => {
         // -------------------------------
         // if (!valid || !user) throw 'User was not found.';
 
-        // setCookie({
-        //   tokenName: app.get('JWT_COOKIE_NAME'),
-        //   token: generateToken(user, app.get('JWT_SECRET')),
-        //   res: context.req.res
-        // });
+        setCookie({
+          tokenName: app.get('JWT_COOKIE_NAME'),
+          token: generateToken(user, app.get('JWT_SECRET')),
+          res: context.req.res
+        });
         if (args.email === user.email) {
           console.log('is logged in')
           return true
