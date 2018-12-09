@@ -9,7 +9,7 @@ const httpWithUploadsLink = createUploadLink({
   // @TODO: If `process.env.NODE_ENV !== 'production'`, then use localhost's GraphQL endpoint
   uri: 'http://localhost:8080/graphql',
   // -------------------------------
-  credentials: process.env.NODE_ENV === 'production' ? 'same-origin' : 'same-origin'
+  credentials: process.env.NODE_ENV === 'production' ? 'same-origin' : 'include'
 });
 
 const client = new ApolloClient({

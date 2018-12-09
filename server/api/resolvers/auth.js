@@ -17,16 +17,26 @@ function setCookie({ tokenName, token, res }) {
    *  3) A boomtown cookie should oly be valid for 2 hours.
    */
   // Refactor this method with the correct configuration values.
+  console.log('res',res)
+
   res.cookie(tokenName, token, {
     httpOnly : true,
     secure : process.env.NODE_ENV === 'production',
     maxAge: 1000*60*60*2 
   });
+
+  console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&',res)
+
   // -------------------------------
 }
 
 function generateToken(user, secret) {
   const { id, email, fullname, bio } = user; // Omit the password from the token
+
+  const token = jwt.sign({ id, email, fullname, bio }, secret, {
+    expiresIn: '2h'
+  })
+
   /**
    *  @TODO: Authentication - Server
    *
@@ -37,7 +47,7 @@ function generateToken(user, secret) {
    *  which can be decoded using the app secret to retrieve the stateless session.
    */
   // Refactor this return statement to return the cryptographic hash (the Token)
-  return '';
+  return token;
   // -------------------------------
 }
 
@@ -114,6 +124,7 @@ module.exports = (app) => {
         //   console.log('is logged in')
         //   return true
         // }
+        console.log('you are logged in')
 
         return true
         

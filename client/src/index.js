@@ -65,6 +65,7 @@ import store from './redux'
 // -------------------------------
 
 import './index.css';
+import { ViewerProvider } from './context/ViewerProvider'
 
 const App = () => {
   return (
@@ -72,9 +73,11 @@ const App = () => {
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
         <ApolloProvider client={client}>
-          <BrowserRouter>
-            <Routes />
-          </BrowserRouter>
+          <ViewerProvider>
+            <BrowserRouter>
+              <Routes />
+            </BrowserRouter>
+          </ViewerProvider>
         </ApolloProvider>
       </MuiThemeProvider>
     </ReduxProvider>

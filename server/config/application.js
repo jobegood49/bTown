@@ -10,6 +10,8 @@ module.exports = (app) => {
   app.set('PG_USER', process.env.PG_USER || 'boomtown')
   app.set('PG_PASSWORD',  process.env.PG_PASSWORD || 'boomtown')
   app.set('PG_DB', process.env.PG_DB || 'boomtown')
+  app.set('JWT_COOKIE_NAME', process.env.JWT_COOKIE_NAME || 'toto1')
+  app.set('JWT_SECRET', process.env.JWT_SECRET || 'toto2')
 
   /**
    *  @TODO: Configuration Variables
